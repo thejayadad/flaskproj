@@ -3,5 +3,12 @@
 
 {% block content %}
 <h2>Index Page</h2>
-
+{% if posts == []: %}
+<p>We are coming, not post yet!</p>
+{% endif %}
+<ul>
+    {% for post in posts %}
+    <li>{{post.title}} - {{post.content}}/10</li>
+    {% endfor %}
+</ul>
 {% endblock %}

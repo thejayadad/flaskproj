@@ -8,7 +8,14 @@
 </head>
 <body>
     <header>
-        Navbar
+        <nav>
+            <ul>
+                <li><a  href="{{ url_for('add') }}">Add</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="">About</a></li>
+                <li><a href="">Contact</a></li>
+            </ul>
+        </nav>
     </header>
     {% block content %} 
     
