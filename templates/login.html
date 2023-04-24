@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Registration</title>
+    <title>Login</title>
     <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='myfont/css/all.min.css')}}">
     <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
@@ -14,7 +14,7 @@
 <body>
 
                 <form action="{{ url_for('login') }}" method="POST">
-                    <h2 class="page-header text-primary text-center">Registration</h2>
+                    <h2 class="page-header text-primary text-center">Login</h2>
                  
               
                         <input type="email" placeholder="Email" name="email" required>             

@@ -1,3 +1,4 @@
+from collections import UserString
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3
@@ -5,9 +6,11 @@ import werkzeug
 from flask_bcrypt import Bcrypt, check_password_hash
 
 
+
 app = Flask(__name__)
 app.secret_key='admin123'
 bcrypt = Bcrypt(app)
+SESSION_TYPE = 'redis'
 
 
 db = sqlite3.connect("posts-collection.db")
@@ -25,16 +28,24 @@ ub.commit()
 
 @app.route("/")
 def index():
-    db = sqlite3.connect("posts-collection.db")
-    db.row_factory =sqlite3.Row
-    cursor = db.cursor()
-    cursor.execute("select * from posts")
-    posts = cursor.fetchall()
-    return render_template('index.html', post=posts)
+    if "use" in session:
+        user = session["use"]
+        db = sqlite3.connect("posts-collection.db")
+        db.row_factory =sqlite3.Row
+        cursor = db.cursor()
+        cursor.execute("select * from posts")
+        posts = cursor.fetchall()
+        return render_template('index.html', post=posts, name=user)
+    else:
+        return redirect(url_for('login')) 
+
+
+
 
 
 @app.route("/add", methods=['POST','GET'])
 def add():
+
    if request.method=='POST':
       title = request.form['title']
       content = request.form['content']
@@ -98,22 +109,17 @@ def login():
         pw = bcrypt.generate_password_hash(password)
         bcrypt.check_password_hash(pw, password)
         cur.execute("select email,password FROM users where email = '+email+' and password='+pw+'")
+        session['use'] = email
         ub.commit()
         return redirect(url_for("index"))
     return render_template("login.html")
 
 
-# @app.route("/add", methods=['POST','GET'])
-# def add():
-#    if request.method=='POST':
-#       title = request.form['title']
-#       content = request.form['content']
-#       db = sqlite3.connect("posts-collection.db")
-#       cursor = db.cursor()
-#       cursor.execute("insert into posts(TITLE,CONTENT) values (?,?)",(title,content))
-#       db.commit()
-#       return redirect(url_for("index"))
-#    return render_template("add.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("use", None)
+    return render_template("login.html")
 
 
 
