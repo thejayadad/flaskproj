@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key='admin123'
 
 
 db = sqlite3.connect("posts-collection.db")
@@ -35,7 +36,6 @@ def add():
       cursor = db.cursor()
       cursor.execute("insert into posts(TITLE,CONTENT) values (?,?)",(title,content))
       db.commit()
-      flash('Post Added Successfully')
       return redirect(url_for("index"))
    return render_template("add.html")
 
@@ -50,7 +50,6 @@ def edit(id):
        cursor = db.cursor()
        cursor.execute("update posts set TITLE=?,CONTENT=? where ID=?",(title,content,id))
        db.commit()
-       flash('Post Updated Successfully')
        return redirect(url_for("index"))
    else:
         db = sqlite3.connect("posts-collection.db")
@@ -72,8 +71,6 @@ def delete(id):
    
 
 if __name__ == "__main__":
-    with app.app_context():
-     db.create_all()
     app.run(debug=True)
 
 
