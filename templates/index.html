@@ -6,10 +6,15 @@
 <p>{{name}}</p>
 <div>
     {% for row in post %}
-    <span>{{row.id}}</span>
-    <p><a href='{{url_for("edit", id=row.ID)}} '>{{row.title}}</a></p>
-    <h2>{{row.content}}</h2>
+    <h3>{{row.title}}</h3>
+    <h2>{{row.body}}</h2>
+    <span>{{row.author_id}}</span>
+    {%if user == author_id%}
+    <p><a href='{{url_for("edit", id=row.ID)}} '>edit</a></p>
     <a href='{{url_for("delete", id=row.ID)}}' onclick='return confirm("Are You Sure")'>Delete</a>
+   <h2>See More</h2>
+   {% endif %}
+
     {% endfor %}
 </div>
 {% endblock %}
